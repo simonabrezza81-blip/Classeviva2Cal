@@ -27,6 +27,14 @@ jobs:
       - name: Create output folder
         run: mkdir -p output
 
+      - name: Check secrets
+        env:
+          CLASSEVIVA_USERNAME: ${{ secrets.CLASSEVIVA_USERNAME }}
+          CLASSEVIVA_PASSWORD: ${{ secrets.CLASSEVIVA_PASSWORD }}
+        run: |
+          test -n "$CLASSEVIVA_USERNAME" && echo "USERNAME presente" || echo "USERNAME MANCANTE"
+          test -n "$CLASSEVIVA_PASSWORD" && echo "PASSWORD presente" || echo "PASSWORD MANCANTE"
+
       - name: Update calendar
         env:
           CLASSEVIVA_USERNAME: ${{ secrets.CLASSEVIVA_USERNAME }}
