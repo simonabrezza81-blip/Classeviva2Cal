@@ -44,7 +44,7 @@ const getUserAuth = async (): Promise<{ token: string, uid: string }> => {
 const getAgendaInterval = async (token: string, uid: string): Promise<string[]> => {
     try {
         const response = await fetch(
-            `https://web.spaggiari.eu/rest/v1/students/${uid}/periods`,
+         `https://web.spaggiari.eu/rest/v1/students/${uid}/periods`,
             {
                 headers: {
                     ...startingHeader,
