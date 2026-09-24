@@ -36,9 +36,8 @@ const getUserAuth = async (): Promise<{ token: string, uid: string }> => {
     console.log("✅ Successfully authenticated with classeviva.");
 
     return {
-        token: tokenResponse.token,
-        uid: tokenResponse.ident.slice(1, -1)
-    };
+    token: tokenResponse.token,
+    uid: tokenResponse.ident.slice(1, -1)
 };
 
 const getAgendaInterval = async (token: string, uid: string): Promise<string[]> => {
