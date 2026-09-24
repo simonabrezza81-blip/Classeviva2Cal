@@ -36,40 +36,25 @@ const getUserAuth = async (): Promise<{ token: string, uid: string }> => {
     console.log("✅ Successfully authenticated with classeviva.");
 
     return {
-    token: tokenResponse.token,
-    uid: tokenResponse.ident.slice(1, -1)
+        token: tokenResponse.token,
+        uid: tokenResponse.ident.slice(1, -1)
+    };
 };
 
-const getAgendaInterval = async (token: string, uid: string): Promise<string[]> => {
-    try {
-        const response = await fetch(
-         `https://web.spaggiari.eu/rest/v1/students/${uid}/periods`,
-            {
-                headers: {
-                    ...startingHeader,
-                    "Z-Auth-Token": token
-                },
-                method: "GET"
-            }
-        );
+const getAgendaInterval = async (): Promise<string[]> => {
+    const start = new Date();
 
-        const responseData: any = (await response.json() as any).periods;
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + 6);
 
-        const periodTimespans: string[] = [
-            responseData[0]?.dateStart.slice(0.10).replace(/-/g, ''),
-            responseData[responseData.length - 1]?.dateEnd.slice(0.10).replace(/-/g, '')
-        ];
+    const formatDate = (date: Date): string => {
+        return date.toISOString().slice(0, 10).replace(/-/g, '');
+    };
 
-        return periodTimespans;
-
-    } catch (error) {
-        console.error("❌ Failed to get agenda interval:", error);
-
-        return [
-            new Date().toISOString().slice(0, 10).replace(/-/g, ''),
-            new Date().toISOString().slice(0, 10).replace(/-/g, '')
-        ];
-    }
+    return [
+        formatDate(start),
+        formatDate(end)
+    ];
 };
 
 const getAgendaItems = async (
@@ -77,7 +62,7 @@ const getAgendaItems = async (
     uid: string
 ): Promise<ics.EventAttributes[]> => {
 
-    const agendaIntervals = await getAgendaInterval(token, uid);
+    const agendaIntervals = await getAgendaInterval();
 
     const agendaRequest = await fetch(
         `https://web.spaggiari.eu/rest/v1/students/${uid}/agenda/all/${agendaIntervals[0]}/${agendaIntervals[1]}`,
